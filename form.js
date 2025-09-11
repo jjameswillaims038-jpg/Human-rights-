@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
     formMessage.textContent = "Submitting...";
     formMessage.style.color = "blue";
 
-    fetch("/.netlify/functions/sendEmail", {
+    fetch("/api/sendEmail", { // Updated for Vercel API
       method: "POST",
       body: formData,
     })
