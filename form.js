@@ -13,15 +13,15 @@ document.addEventListener("DOMContentLoaded", function () {
     regEmail = document.getElementById("regEmail").value;
     regPhone = document.getElementById("regPhone").value;
 
-    const amount = 2000 * 100; // ₦2000
+    const amount = 2000 * 100; // ₦2000 in kobo
 
     const handler = PaystackPop.setup({
-      key: "pk_test_xxxxxxxxxxxxx", // replace with your public key
+      key: "pk_test_xxxxxxxxxxxxx", // replace with your Paystack public key
       email: regEmail,
       amount: amount,
       currency: "NGN",
       callback: function (response) {
-        // Payment successful → show form
+        // Payment successful → show membership form
         document.getElementById("registerSection").style.display = "none";
         document.getElementById("apply").style.display = "block";
 
@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", function () {
     handler.openIframe();
   });
 
-  // Step 3: Handle Membership Form Submission
+  // Step 2: Membership Form Submission
   membershipForm.addEventListener("submit", function (e) {
     e.preventDefault();
 
@@ -54,11 +54,15 @@ document.addEventListener("DOMContentLoaded", function () {
     })
       .then(async (res) => {
         let data;
-        try { data = await res.json(); } catch { throw new Error("Server response not JSON"); }
+        try { 
+          data = await res.json(); 
+        } catch { 
+          throw new Error("Server response not JSON"); 
+        }
+
         if (data.success) {
-          formMessage.style.color = "green";
-          formMessage.textContent = "Application submitted successfully! Check your email.";
-          membershipForm.reset();
+          // Redirect to Thank You page
+          window.location.href = "thank-you.html";
         } else {
           throw new Error(data.error || "Submission failed.");
         }
