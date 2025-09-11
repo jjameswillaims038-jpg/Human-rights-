@@ -135,12 +135,27 @@ p {
 }
 
 #joinBtn {
-  animation: pulse 2s infinite;
+  background-color: var(--blue);
+  color: #fff;
+  padding: 14px 28px; /* bigger button */
+  font-size: 1.2rem; /* larger text */
+  border-radius: var(--radius);
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  animation: pulseSizeColor 2s infinite;
+  transition: transform 0.2s;
 }
 
-@keyframes pulse {
-  0%, 100% { background-color: var(--blue); }
-  50% { background-color: #0d47a1; }
+@keyframes pulseSizeColor {
+  0%, 100% { 
+    transform: scale(1);
+    background-color: var(--blue);
+  }
+  50% { 
+    transform: scale(1.2); /* grow bigger */
+    background-color: #0d47a1; /* darker blue */
+  }
 }
 
 /* About Section */
