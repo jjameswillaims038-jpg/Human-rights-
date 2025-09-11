@@ -273,96 +273,72 @@ p {
 /* Floating Chat Button */
 #chatBtn {
   position: fixed;
+  bottom: 20px;
   right: 20px;
-  bottom: 30px;
   background: var(--blue);
-  color: #fff;
+  color: white;
   border: none;
-  border-radius: 50%;
   width: 60px;
   height: 60px;
+  border-radius: 50%;
   font-size: 24px;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
   z-index: 1000;
-  transition: transform 0.3s;
-}
-
-#chatBtn:hover {
-  transform: scale(1.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
 /* Chat Window */
 #chatWindow {
+  display: none;
   position: fixed;
   bottom: 90px;
   right: 20px;
-  width: 320px;
-  max-height: 480px;
-  background: #fff;
+  width: 300px;
+  max-height: 400px;
+  background: white;
   border-radius: 10px;
   box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-  display: none;
-  flex-direction: column;
-  overflow: hidden;
-  z-index: 999;
-  transform: translateX(100%);
-  transition: transform 0.4s ease;
-}
-
-/* Show chat window */
-#chatWindow.show {
   display: flex;
-  transform: translateX(0);
+  flex-direction: column;
+  z-index: 1000;
+  overflow: hidden;
 }
 
 #chatHeader {
   background: var(--blue);
-  color: #fff;
-  padding: 12px;
+  color: white;
+  padding: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-weight: 700;
-}
-
-#chatHeader button {
-  background: transparent;
-  border: none;
-  color: #fff;
-  font-size: 18px;
-  cursor: pointer;
 }
 
 #chatMessages {
   flex: 1;
   padding: 10px;
   overflow-y: auto;
-  background: #f7f9fc;
+  font-size: 14px;
 }
 
 #chatInputWrapper {
   display: flex;
-  gap: 6px;
-  padding: 10px;
-  border-top: 1px solid #e6eef8;
+  border-top: 1px solid #ddd;
 }
 
-#chatInput {
+#chatInputWrapper input {
   flex: 1;
-  padding: 8px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
+  border: none;
+  padding: 10px;
+  font-size: 14px;
 }
 
-#sendChat {
-  background: var(--blue);
-  color: #fff;
+#chatInputWrapper button {
   border: none;
-  padding: 0 12px;
-  border-radius: 8px;
+  background: var(--blue);
+  color: white;
+  padding: 0 15px;
   cursor: pointer;
 }
