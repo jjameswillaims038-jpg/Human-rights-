@@ -25,7 +25,7 @@
 
   <!-- Helpline -->
   <div class="helpline">
-    <p>📞 Helpline: +2348060943981</p>
+    <a href="tel:+2348060943981"><i class="fas fa-phone"></i> +234 806 094 3981</a>
   </div>
 
   <!-- Header -->
@@ -131,110 +131,115 @@
   </section>
 
   <!-- Media -->
-<section id="media" class="section media">
-  <div class="wrap">
-    <h3 class="section-title">🎥 Media</h3>
-    <p>
-      This section documents incidents of human rights violations, highlighting
-      cases of police brutality, army oppression, and civil defence misconduct
-      against citizens. Our aim is to raise awareness, provide evidence, and
-      advocate for justice.
-    </p>
+  <section id="media" class="section media">
+    <div class="wrap">
+      <h3 class="section-title">🎥 Media</h3>
+      <p>
+        This section documents incidents of human rights violations, highlighting
+        cases of police brutality, army oppression, and civil defence misconduct
+        against citizens. Our aim is to raise awareness, provide evidence, and
+        advocate for justice.
+      </p>
 
-    <div class="media-gallery">
-      <!-- Example images -->
-      <div class="media-item">
-        <img src="images/media1.jpg" alt="Protest against police brutality" />
-        <p class="caption">Citizens protesting against police brutality</p>
-      </div>
+      <div class="media-gallery">
+        <div class="media-item">
+          <img src="images/media1.jpg" alt="Protest against police brutality" />
+          <p class="caption">Citizens protesting against police brutality</p>
+        </div>
 
-      <div class="media-item">
-        <img src="images/media2.jpg" alt="Human rights abuse documentation" />
-        <p class="caption">Documenting incidents of human rights abuse</p>
-      </div>
+        <div class="media-item">
+          <img src="images/media2.jpg" alt="Human rights abuse documentation" />
+          <p class="caption">Documenting incidents of human rights abuse</p>
+        </div>
 
-      <!-- Example video -->
-      <div class="media-item">
-        <video controls>
-          <source src="videos/abuse1.mp4" type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
-        <p class="caption">Video evidence of unlawful arrest</p>
+        <div class="media-item">
+          <video controls>
+            <source src="videos/abuse1.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+          <p class="caption">Video evidence of unlawful arrest</p>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
   <!-- Membership -->
-<section id="membership" class="section membership">
-  <div class="wrap">
-    <h3 class="section-title">📝 Membership</h3>
-    <p>
-      Register as a member of HRVF and stand with us against oppression and injustice. 
-      Membership form will only be available after payment of <strong>₦2,000</strong>.
-    </p>
+  <section id="membership" class="section membership" style="display:none;">
+    <div class="wrap">
+      <h3 class="section-title">📝 Membership</h3>
+      <p>
+        Register as a member of HRVF and stand with us against oppression and injustice. 
+        Membership form will only be available after payment of <strong>₦2,000</strong>.
+      </p>
 
-    <!-- Step 1: Registration -->
-    <section id="registerSection" class="form-section">
-      <form id="registerForm">
-        <label>Email <input type="email" id="regEmail" required></label>
-        <label>Phone <input type="tel" id="regPhone" required></label>
-        <button type="submit" class="btn">Proceed to Payment</button>
-      </form>
-    </section>
+      <!-- Step 1: Registration -->
+      <section id="registerSection" class="form-section">
+        <form id="registerForm">
+          <label>Email <input type="email" id="regEmail" class="pro-input" required></label>
+          <label>Phone <input type="tel" id="regPhone" class="pro-input" required></label>
+          <button type="submit" class="btn">Proceed to Payment</button>
+        </form>
+      </section>
 
-    <!-- Step 2 & 3: Payment → Membership Form -->
-    <section id="apply" class="form-section" style="display:none; margin-top:20px;">
-      <form id="membershipForm" enctype="multipart/form-data">
-        <label>Full Name <input type="text" name="fullname" required></label>
-        <label>Email <input type="email" id="formEmail" name="email" readonly></label>
-        <label>Phone <input type="tel" id="formPhone" name="phone" readonly></label>
-        <label>Address <input type="text" name="address" required></label>
-        <label>Upload Passport <input type="file" name="passport" accept=".jpg,.jpeg,.png" required></label>
-        <label class="checkbox"><input type="checkbox" name="confirm" required> I confirm that all information provided is correct</label>
-        <button type="submit" class="btn">Submit Application</button>
-        <div id="formMessage" class="form-message"></div>
-      </form>
-    </section>
-  </div>
-</section>
+      <!-- Step 2 & 3 -->
+      <section id="apply" class="form-section" style="display:none; margin-top:20px;">
+        <form id="membershipForm" enctype="multipart/form-data">
+          <label>Full Name <input type="text" name="fullname" required></label>
+          <label>Email <input type="email" id="formEmail" name="email" readonly></label>
+          <label>Phone <input type="tel" id="formPhone" name="phone" readonly></label>
+          <label>Address <input type="text" name="address" required></label>
+          <label>Upload Passport <input type="file" name="passport" accept=".jpg,.jpeg,.png" required></label>
+          <label class="checkbox"><input type="checkbox" name="confirm" required> I confirm that all information provided is correct</label>
+          <button type="submit" class="btn">Submit Application</button>
+          <div id="formMessage" class="form-message"></div>
+        </form>
+      </section>
+    </div>
+  </section>
   
   <!-- Footer -->
-<footer class="site-footer" id="contact">
-  <div class="wrap">
-    <h3 class="section-title">📞 Contact Us</h3>
+  <footer class="site-footer" id="contact">
+    <div class="wrap">
+      <h3 class="section-title">📞 Contact Us</h3>
 
-    <p>
-      <i class="fas fa-envelope"></i>
-      Email: <a href="mailto:info@hrvf.org">info@hrvf.org</a>
-    </p>
+      <p>
+        <i class="fas fa-envelope"></i>
+        Email: <a href="mailto:info@hrvf.org">info@hrvf.org</a>
+      </p>
 
-    <p>
-      <i class="fas fa-phone"></i>
-      Helpline: <a href="tel:+2348060944981">+234 806 094 4981</a>
-    </p>
+      <p>
+        <i class="fas fa-phone"></i>
+        Helpline: <a href="tel:+2348060944981">+234 806 094 4981</a>
+      </p>
 
-    <div class="social-icons">
-      <a href="https://facebook.com" target="_blank" aria-label="Facebook">
-        <i class="fab fa-facebook"></i>
-      </a>
-      <a href="https://wa.me/2348060944981" target="_blank" aria-label="WhatsApp">
-        <i class="fab fa-whatsapp"></i>
-      </a>
-      <a href="https://youtube.com" target="_blank" aria-label="YouTube">
-        <i class="fab fa-youtube"></i>
-      </a>
-      <a href="https://m.me/yourpage" target="_blank" aria-label="Messenger">
-        <i class="fab fa-facebook-messenger"></i>
-      </a>
+      <div class="social-icons">
+        <a href="https://facebook.com" target="_blank" aria-label="Facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+        <a href="https://wa.me/2348060944981" target="_blank" aria-label="WhatsApp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+        <a href="https://youtube.com" target="_blank" aria-label="YouTube">
+          <i class="fab fa-youtube"></i>
+        </a>
+        <a href="https://m.me/yourpage" target="_blank" aria-label="Messenger">
+          <i class="fab fa-facebook-messenger"></i>
+        </a>
+      </div>
+
+      <p>©️ 2025 Human Rights Violation and Advocacy Foundation (HRVF). All rights reserved.</p>
     </div>
-
-    <p>©️ 2025 Human Rights Violation and Advocacy Foundation (HRVF). All rights reserved.</p>
-  </div>
-</footer>
+  </footer>
 
   <!-- Paystack -->
   <script src="https://js.paystack.co/v1/inline.js"></script>
+  <script>
+    // Show membership section on button click
+    document.getElementById("joinBtn").addEventListener("click", () => {
+      document.getElementById("membership").style.display = "block";
+      document.getElementById("membership").scrollIntoView({behavior:"smooth"});
+    });
+  </script>
   <script src="form.js"></script>
 </body>
 </html>
