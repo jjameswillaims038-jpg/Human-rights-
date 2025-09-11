@@ -1,0 +1,24 @@
+{
+  "name": "hrvf-membership-portal",
+  "version": "1.0.0",
+  "description": "Human Rights Violation and Advocacy Foundation (HRVF) membership registration and payment portal",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "pdfkit": "^0.15.0",
+    "nodemailer": "^6.9.13",
+    "busboy": "^1.6.0",
+    "uuid": "^9.0.0"
+  },
+  "engines": {
+    "node": ">=18.x"
+  },
+  "author": "Human Rights Violation and Advocacy Foundation",
+  "license": "MIT"
+}
