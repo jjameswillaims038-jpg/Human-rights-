@@ -212,7 +212,6 @@
   <script src="form.js"></script>
 </body>
 </html>
-
 <!-- Floating Chat Button -->
 <button id="chatBtn" title="Chat with AI">
   <i class="fas fa-robot"></i>
@@ -230,16 +229,9 @@
     <button id="sendChat"><i class="fas fa-paper-plane"></i></button>
   </div>
 </div>
-<script>
-  const chatBtn = document.getElementById("chatBtn");
-  const chatWindow = document.getElementById("chatWindow");
-  const closeChat = document.getElementById("closeChat");
 
-  chatBtn.addEventListener("click", () => {
-    chatWindow.style.display = "block"; // Show chat window
-  });
+<!-- Include FontAwesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 
-  closeChat.addEventListener("click", () => {
-    chatWindow.style.display = "none"; // Hide chat window
-  });
-</script>
+<!-- Chat JS -->
+<script src="chat.js"></script>
