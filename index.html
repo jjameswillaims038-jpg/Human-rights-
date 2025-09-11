@@ -230,3 +230,16 @@
     <button id="sendChat"><i class="fas fa-paper-plane"></i></button>
   </div>
 </div>
+<script>
+  const chatBtn = document.getElementById("chatBtn");
+  const chatWindow = document.getElementById("chatWindow");
+  const closeChat = document.getElementById("closeChat");
+
+  chatBtn.addEventListener("click", () => {
+    chatWindow.style.display = "block"; // Show chat window
+  });
+
+  closeChat.addEventListener("click", () => {
+    chatWindow.style.display = "none"; // Hide chat window
+  });
+</script>
