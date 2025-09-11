@@ -1,67 +1,57 @@
-// generateSlip.js
-function generateSlip(formData) {
-  // Unique slip number
-  const prefix = "HRVF";
-  const slipNo =
-    prefix +
-    "-" +
-    Math.floor(1000 + Math.random() * 9000) +
-    "-" +
-    new Date().getFullYear();
+// generateSlipPDF.js
+import jsPDF from "jspdf";
 
-  // Date
+export function generateSlipPDF(formData) {
+  const doc = new jsPDF();
+
+  // Unique slip number
+  const slipNo = `HRVF-${Math.floor(1000 + Math.random() * 9000)}-${new Date().getFullYear()}`;
   const today = new Date().toLocaleDateString("en-NG");
 
-  // Slip content
-  return `
-    <html>
-      <head>
-        <meta charset="UTF-8">
-        <title>HRVF Membership Acknowledgment Slip</title>
-        <style>
-          body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 40px; background: #f8f9fa; }
-          .slip { border: 2px solid #222; padding: 30px; max-width: 700px; margin: auto; background: #fff; }
-          h2 { text-align: center; margin-bottom: 10px; }
-          .header { text-align: center; margin-bottom: 20px; }
-          .header img { width: 80px; }
-          .org-name { font-size: 18px; font-weight: bold; margin-top: 10px; }
-          .info { margin: 20px 0; }
-          .info p { margin: 8px 0; font-size: 15px; }
-          .label { font-weight: bold; }
-          .footer { margin-top: 40px; font-size: 0.9em; text-align: center; }
-          .stamp { margin-top: 40px; text-align: right; }
-          .stamp img { width: 120px; opacity: 0.8; }
-        </style>
-      </head>
-      <body>
-        <div class="slip">
-          <div class="header">
-            <img src="https://yourdomain.com/images/logo.png" alt="HRVF Logo" />
-            <div class="org-name">Human Rights Violation and Advocacy Foundation (HRVF)</div>
-            <h2>Membership Acknowledgment Slip</h2>
-          </div>
+  // Header
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(18);
+  doc.text("Human Rights Violation and Advocacy Foundation (HRVF)", 105, 20, { align: "center" });
+  doc.setFontSize(16);
+  doc.text("Membership Acknowledgment Slip", 105, 30, { align: "center" });
 
-          <div class="info">
-            <p><span class="label">Slip No:</span> ${slipNo}</p>
-            <p><span class="label">Full Name:</span> ${formData.get("fullname")}</p>
-            <p><span class="label">Email:</span> ${formData.get("email")}</p>
-            <p><span class="label">Phone:</span> ${formData.get("phone")}</p>
-            <p><span class="label">Membership Type:</span> ${formData.get("membershipType") || "General"}</p>
-            <p><span class="label">Payment Reference:</span> ${formData.get("paymentReference")}</p>
-            <p><span class="label">Date:</span> ${today}</p>
-          </div>
+  // User Info
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(12);
+  doc.text(`Slip No: ${slipNo}`, 20, 50);
+  doc.text(`Full Name: ${formData.fullname}`, 20, 60);
+  doc.text(`Email: ${formData.email}`, 20, 70);
+  doc.text(`Phone: ${formData.phone}`, 20, 80);
+  doc.text(`Membership Type: ${formData.membershipType || "General"}`, 20, 90);
+  doc.text(`Payment Reference: ${formData.paymentReference}`, 20, 100);
+  doc.text(`Date: ${today}`, 20, 110);
 
-          <div class="stamp">
-            <p>Authorized Stamp/Seal:</p>
-            <img src="https://yourdomain.com/images/stamp.png" alt="HRVF Stamp" />
-          </div>
+  // Draw circular seal
+  const centerX = 150;
+  const centerY = 70;
+  const radius = 40;
 
-          <div class="footer">
-            <p>✊ Defending Human Rights, Protecting Dignity</p>
-            <p>© 2025 Human Rights Violation and Advocacy Foundation</p>
-          </div>
-        </div>
-      </body>
-    </html>
-  `;
+  // Circle
+  doc.setDrawColor(178, 34, 34);
+  doc.setLineWidth(1.5);
+  doc.circle(centerX, centerY, radius, "S");
+
+  // Curved text along top half of the circle
+  const sealText = "HUMAN RIGHTS VIOLATIONS AND ADVOCACY FOUNDATION";
+  const angleStep = Math.PI / sealText.length; // top half
+  for (let i = 0; i < sealText.length; i++) {
+    const angle = -Math.PI / 2 + i * angleStep; // start at left top
+    const x = centerX + radius * Math.cos(angle);
+    const y = centerY + radius * Math.sin(angle) + 2; // small offset
+    doc.setFontSize(6);
+    doc.text(sealText[i], x, y, { align: "center", angle: (angle * 180) / Math.PI + 90 });
+  }
+
+  // Footer
+  doc.setFontSize(10);
+  doc.text("✊ Defending Human Rights, Protecting Dignity", 105, 160, { align: "center" });
+  doc.text("© 2025 Human Rights Violation and Advocacy Foundation", 105, 168, { align: "center" });
+
+  // Save PDF
+  doc.save(`${formData.fullname}_HRVF_Slip.pdf`);
 }
