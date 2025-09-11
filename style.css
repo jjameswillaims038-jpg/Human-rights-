@@ -263,38 +263,6 @@ p {
   font-weight: 600;
 }
 
-/* Seal Section */
-.seal-section {
-  text-align: center;
-  margin: 40px 0;
-}
-
-.seal {
-  width: 220px;
-  height: 220px;
-  border: 5px solid #b22222; /* deep red border */
-  border-radius: 50%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  font-family: 'Georgia', serif;
-  color: #b22222;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  font-weight: bold;
-  margin: 0 auto;
-  box-shadow: 0 0 15px rgba(178, 34, 34, 0.4); /* subtle depth */
-  transform: rotate(-2deg); /* slight tilt for realism */
-}
-
-.seal span {
-  display: block;
-  line-height: 1.3;
-  font-size: 14px;
-}
-
 /* Footer */
 .site-footer {
   background: var(--dark);
@@ -349,11 +317,5 @@ p {
   }
   .nav-toggle {
     display: inline-block;
-  }
-
-  .seal {
-    width: 180px;
-    height: 180px;
-    font-size: 12px;
   }
 }
