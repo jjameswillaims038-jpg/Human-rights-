@@ -214,7 +214,9 @@
 </html>
 
 <!-- Floating Chat Button -->
-<button id="chatBtn"><i class="fas fa-robot"></i></button>
+<button id="chatBtn" title="Chat with AI">
+  <i class="fas fa-robot"></i>
+</button>
 
 <!-- AI Chat Window -->
 <div id="chatWindow">
@@ -228,69 +230,3 @@
     <button id="sendChat"><i class="fas fa-paper-plane"></i></button>
   </div>
 </div>
-
-<script>
-  const chatBtn = document.getElementById('chatBtn');
-  const chatWindow = document.getElementById('chatWindow');
-  const closeChat = document.getElementById('closeChat');
-  const sendChat = document.getElementById('sendChat');
-  const chatInput = document.getElementById('chatInput');
-  const chatMessages = document.getElementById('chatMessages');
-
-  // Toggle chat window
-  chatBtn.addEventListener('click', () => {
-    chatWindow.style.display = 'flex';
-    chatInput.focus();
-  });
-
-  closeChat.addEventListener('click', () => {
-    chatWindow.style.display = 'none';
-  });
-
-  // Append message to chat
-  function appendMessage(sender, text) {
-    const msg = document.createElement('div');
-    msg.className = `chat-message ${sender}`;
-    msg.textContent = text;
-    chatMessages.appendChild(msg);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-  }
-
-  // Send message to API
-  async function handleSend() {
-    const message = chatInput.value.trim();
-    if (!message) return;
-
-    // Display user message
-    appendMessage('user', message);
-    chatInput.value = '';
-
-    // Display loading for AI
-    const loadingMsg = document.createElement('div');
-    loadingMsg.className = 'chat-message ai';
-    loadingMsg.textContent = 'AI is thinking...';
-    chatMessages.appendChild(loadingMsg);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-
-    try {
-      // Replace the URL below with your API endpoint
-      const response = await fetch('YOUR_API_ENDPOINT_HERE', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message })
-      });
-
-      const data = await response.json();
-      loadingMsg.textContent = data.reply || 'No response from AI';
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-
-    } catch (err) {
-      loadingMsg.textContent = 'Error: Could not reach AI API';
-    }
-  }
-
-  sendChat.addEventListener('click', handleSend);
-  chatInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') handleSend();
-  });
-</script>
