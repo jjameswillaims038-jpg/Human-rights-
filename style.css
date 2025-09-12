@@ -144,27 +144,38 @@ p {
   max-width: 650px;
 }
 
-#joinBtn {
+/* Hero Action Buttons */
+.hero-actions {
+  display: flex;
+  flex-direction: column; /* stack vertically */
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.hero-actions .btn {
   background-color: var(--blue);
   color: #fff;
   padding: 16px 32px;
   font-size: 1.2rem;
   border-radius: var(--radius);
   font-weight: 700;
+  text-align: center;
+  text-decoration: none;
   cursor: pointer;
-  border: none;
-  animation: pulseSizeColor 2s infinite;
   transition: transform 0.3s, background-color 0.3s;
 }
 
-#joinBtn:hover {
-  transform: scale(1.1);
+.hero-actions .btn:hover {
   background-color: #0d47a1;
+  transform: scale(1.05);
 }
 
-@keyframes pulseSizeColor {
-  0%, 100% { transform: scale(1); background-color: var(--blue); }
-  50% { transform: scale(1.15); background-color: #0d47a1; }
+.hero-actions .secondary-btn {
+  background-color: #28a745;
+}
+
+.hero-actions .secondary-btn:hover {
+  background-color: #218838;
 }
 
 /* Sections */
