@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Get Involved – HRVF</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/png" href="images/logo.png">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="wrap">
+      <div class="brand">
+        <img src="images/logo.png" alt="HRVF Logo" class="logo">
+        <h1>Get Involved – HRVF</h1>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+
+    <!-- Donation Section -->
+    <section class="membership">
+      <h2>💙 Donate to HRVF</h2>
+      <p>Each donation to HRVF is an investment in constructive social transformation. 
+         Your contribution will help us to economically and politically strengthen the marginalized and deprived sections of society. 
+         You can support HRVF in promoting livelihoods and good governance by making a donation today.</p>
+
+      <p>Please send your cheque/draft in favour of <strong>HRVF</strong>  
+         or make an online donation securely via Paystack below:</p>
+
+      <form id="donationForm">
+        <label>Email <input type="email" id="donorEmail" required></label>
+        <label>Phone <input type="tel" id="donorPhone" required></label>
+        <label>Amount (₦) <input type="number" id="donorAmount" min="100" required></label>
+        <button type="submit" class="btn">Donate Now</button>
+      </form>
+      <div id="donationMessage" class="form-message"></div>
+    </section>
+
+    <!-- Careers Section -->
+    <section class="membership" style="margin-top:40px;">
+      <h2>💼 Careers at HRVF</h2>
+      <p>Thank you for your interest in working with HRVF. 
+         We believe in empowering individuals who share our passion for justice and human rights.</p>
+
+      <ul style="margin-left:20px;">
+        <li>🙌 <strong>Volunteers</strong> – Join our grassroots programs and campaigns.</li>
+        <li>📚 <strong>Interns</strong> – Gain valuable field experience and contribute to advocacy.</li>
+      </ul>
+
+      <p style="margin-top:15px;">To apply, kindly email us at <a href="mailto:careers@hrvf.org">careers@hrvf.org</a>.</p>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>©️ 2025 HRVF. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="https://js.paystack.co/v1/inline.js"></script>
+  <script>
+    document.getElementById("donationForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const donorEmail = document.getElementById("donorEmail").value;
+      const donorPhone = document.getElementById("donorPhone").value;
+      const donorAmount = document.getElementById("donorAmount").value * 100; // convert to kobo
+
+      const handler = PaystackPop.setup({
+        key: "pk_test_xxxxxxxxxxxxx", // Replace with your Paystack key
+        email: donorEmail,
+        amount: donorAmount,
+        currency: "NGN",
+        callback: function(response) {
+          window.location.href = "donation-thank-you.html";
+        },
+        onClose: function() {
+          alert("Donation cancelled.");
+        }
+      });
+
+      handler.openIframe();
+    });
+  </script>
+</body>
+</html>
