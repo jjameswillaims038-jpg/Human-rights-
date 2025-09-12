@@ -14,8 +14,18 @@
     <div class="wrap">
       <div class="brand">
         <img src="images/logo.png" alt="HRVF Logo" class="logo">
-        <h1>Get Involved – HRVF</h1>
+        <h1>HRVF</h1>
       </div>
+      <nav class="main-nav">
+        <a href="index.html">Home</a>
+        <a href="index.html#about">About</a>
+        <a href="index.html#activities">Activities</a>
+        <a href="index.html#rights">Rights</a>
+        <a href="index.html#media">Media</a>
+        <a href="index.html#membership">Membership</a>
+        <a href="get-involved.html" class="active">Get Involved</a>
+        <a href="index.html#contact">Contact</a>
+      </nav>
     </div>
   </header>
 
@@ -24,34 +34,42 @@
     <!-- Donation Section -->
     <section class="membership">
       <h2>💙 Donate to HRVF</h2>
-      <p>Each donation to HRVF is an investment in constructive social transformation. 
-         Your contribution will help us to economically and politically strengthen the marginalized and deprived sections of society. 
-         You can support HRVF in promoting livelihoods and good governance by making a donation today.</p>
+      <p>
+        Each donation to HRVF is an investment in constructive social transformation. 
+        Your contribution will help us to economically and politically strengthen the marginalized and deprived sections of society. 
+        You can support HRVF in promoting livelihoods and good governance by making a donation today.
+      </p>
 
-      <p>Please send your cheque/draft in favour of <strong>HRVF</strong>  
-         or make an online donation securely via Paystack below:</p>
+      <p>
+        Please send your cheque/draft in favour of <strong>HRVF</strong>  
+        or make an online donation securely via Paystack below:
+      </p>
 
-      <form id="donationForm">
+      <form id="donationForm" class="form-section">
         <label>Email <input type="email" id="donorEmail" required></label>
         <label>Phone <input type="tel" id="donorPhone" required></label>
         <label>Amount (₦) <input type="number" id="donorAmount" min="100" required></label>
-        <button type="submit" class="btn">Donate Now</button>
+        <button type="submit" id="donateBtn">Donate Now</button>
       </form>
       <div id="donationMessage" class="form-message"></div>
     </section>
 
     <!-- Careers Section -->
-    <section class="membership" style="margin-top:40px;">
+    <section class="membership">
       <h2>💼 Careers at HRVF</h2>
-      <p>Thank you for your interest in working with HRVF. 
-         We believe in empowering individuals who share our passion for justice and human rights.</p>
+      <p>
+        Thank you for your interest in working with HRVF. 
+        We believe in empowering individuals who share our passion for justice and human rights.
+      </p>
 
-      <ul style="margin-left:20px;">
+      <ul>
         <li>🙌 <strong>Volunteers</strong> – Join our grassroots programs and campaigns.</li>
         <li>📚 <strong>Interns</strong> – Gain valuable field experience and contribute to advocacy.</li>
       </ul>
 
-      <p style="margin-top:15px;">To apply, kindly email us at <a href="mailto:careers@hrvf.org">careers@hrvf.org</a>.</p>
+      <p>
+        To apply, kindly email us at <a href="mailto:careers@hrvf.org">careers@hrvf.org</a>.
+      </p>
     </section>
 
   </main>
@@ -62,6 +80,7 @@
     </div>
   </footer>
 
+  <!-- Paystack -->
   <script src="https://js.paystack.co/v1/inline.js"></script>
   <script>
     document.getElementById("donationForm").addEventListener("submit", function(e) {
@@ -69,15 +88,16 @@
 
       const donorEmail = document.getElementById("donorEmail").value;
       const donorPhone = document.getElementById("donorPhone").value;
-      const donorAmount = document.getElementById("donorAmount").value * 100; // convert to kobo
+      const donorAmount = document.getElementById("donorAmount").value * 100; // kobo
 
       const handler = PaystackPop.setup({
         key: "pk_test_xxxxxxxxxxxxx", // Replace with your Paystack key
         email: donorEmail,
         amount: donorAmount,
         currency: "NGN",
+        ref: "HRVF-" + Math.floor(Math.random() * 1000000000 + 1),
         callback: function(response) {
-          window.location.href = "donation-thank-you.html";
+          window.location.href = "get-involved-thank-you.html";
         },
         onClose: function() {
           alert("Donation cancelled.");
