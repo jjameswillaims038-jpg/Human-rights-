@@ -104,7 +104,8 @@ p {
   transition: background 0.25s, color 0.25s;
 }
 
-.main-nav a:hover {
+.main-nav a:hover,
+.main-nav a.active {
   background: rgba(17, 85, 204, 0.1);
   color: var(--blue);
 }
@@ -167,7 +168,7 @@ p {
 }
 
 /* Sections */
-.about, .activities, .rights, .media, .membership {
+.about, .activities, .rights, .media, .membership, .donation, .careers {
   background: #fff;
   border-radius: var(--radius);
   padding: 35px;
@@ -211,11 +212,14 @@ p {
 /* Form */
 #membership { display: none; }
 
-.form-section {
+.form-section,
+#donationForm {
   margin-top: 20px;
 }
 
-.form-section input, .form-section select {
+.form-section input, 
+.form-section select,
+#donationForm input {
   width: 100%;
   padding: 12px;
   margin: 8px 0 20px 0;
@@ -224,7 +228,8 @@ p {
   background: #fbfdff;
 }
 
-.form-section button {
+.form-section button,
+#donationForm button {
   background-color: var(--blue);
   color: #fff;
   padding: 14px 28px;
@@ -235,7 +240,8 @@ p {
   transition: background 0.25s, transform 0.2s;
 }
 
-.form-section button:hover {
+.form-section button:hover,
+#donationForm button:hover {
   background: #0d47a1;
   transform: scale(1.05);
 }
