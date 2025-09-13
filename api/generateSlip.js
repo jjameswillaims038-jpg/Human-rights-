@@ -1,9 +1,8 @@
-// generateSlip.js
 import PDFDocument from "pdfkit";
-import fs from "fs";
-import path from "path";
-import os from "os";
 
+/**
+ * Generate slip number like HRVF251234
+ */
 function generateSlipNumber() {
   const prefix = "HRVF"; // Human Rights Violation Foundation
   const year = new Date().getFullYear().toString().slice(-2); // last 2 digits of year
@@ -12,23 +11,21 @@ function generateSlipNumber() {
 }
 
 /**
- * Generates a membership acknowledgment slip PDF and returns the tmp file path.
- * Works on Vercel (serverless).
+ * Generates a membership acknowledgment slip PDF and returns it as a Buffer.
+ * Works perfectly on Vercel (serverless).
  * @param {Object} formData - Registration form fields
  * @param {Object} paymentData - Payment info (reference, amount, paidAt)
- * @returns {Promise<string>} Path to PDF file in /tmp
+ * @returns {Promise<Buffer>} PDF Buffer
  */
 export async function generateSlipPDF(formData, paymentData) {
   return new Promise((resolve, reject) => {
     try {
-      const slipPath = path.join(
-        os.tmpdir(),
-        `${formData.surname || "member"}_HRVF_Slip.pdf`
-      );
-
       const doc = new PDFDocument({ margin: 50 });
-      const stream = fs.createWriteStream(slipPath);
-      doc.pipe(stream);
+      const chunks = [];
+
+      // Collect PDF data in memory
+      doc.on("data", (chunk) => chunks.push(chunk));
+      doc.on("end", () => resolve(Buffer.concat(chunks)));
 
       // --- HEADER ---
       doc.fillColor("#000000")
@@ -70,16 +67,12 @@ export async function generateSlipPDF(formData, paymentData) {
         .font("Helvetica").text(paymentData?.reference || "N/A");
 
       doc.font("Helvetica-Bold").text("Amount Paid: ", { continued: true })
-        .font("Helvetica")
-        .text(
-          `₦${
-            paymentData?.amount ? (paymentData.amount / 100).toFixed(2) : "0.00"
-          }`
+        .font("Helvetica").text(
+          `₦${paymentData?.amount ? (paymentData.amount / 100).toFixed(2) : "0.00"}`
         );
 
       doc.font("Helvetica-Bold").text("Payment Date: ", { continued: true })
-        .font("Helvetica")
-        .text(
+        .font("Helvetica").text(
           paymentData?.paidAt
             ? new Date(paymentData.paidAt).toLocaleString()
             : "N/A"
@@ -124,9 +117,6 @@ export async function generateSlipPDF(formData, paymentData) {
       );
 
       doc.end();
-
-      stream.on("finish", () => resolve(slipPath));
-      stream.on("error", (err) => reject(err));
     } catch (err) {
       reject(err);
     }
