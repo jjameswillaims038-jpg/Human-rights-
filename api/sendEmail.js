@@ -55,8 +55,8 @@ export default async function handler(req, res) {
         status: "Verified",
       };
 
-      // --- Generate Membership Slip PDF ---
-      const slipPath = await generateSlipPDF(fields, paymentData);
+      // --- Generate Membership Slip PDF (Buffer now) ---
+      const slipBuffer = await generateSlipPDF(fields, paymentData);
 
       const passportFile = files.passport;
 
@@ -86,7 +86,9 @@ Status: ${paymentData.status}
 Attachments: Membership Slip${passportFile ? " + Passport" : ""}
 `;
 
-      const attachments = [{ filename: "membership_slip.pdf", path: slipPath }];
+      const attachments = [
+        { filename: "membership_slip.pdf", content: slipBuffer },
+      ];
       if (passportFile) {
         attachments.push({ filename: passportFile.filename, path: passportFile.path });
       }
@@ -94,7 +96,7 @@ Attachments: Membership Slip${passportFile ? " + Passport" : ""}
       await transporter.sendMail({
         from: "yourhrvfemail@gmail.com",
         to: "yourhrvfemail@gmail.com",
-        subject: "New HRVF Membership Registered",
+        subject: "New G.N.N.HRVF Membership Registered",
         text: adminBody,
         attachments,
       });
@@ -104,28 +106,26 @@ Attachments: Membership Slip${passportFile ? " + Passport" : ""}
         await transporter.sendMail({
           from: "yourhrvfemail@gmail.com",
           to: fields.email,
-          subject: "Your HRVF Membership Acknowledgment Slip",
+          subject: "Your G.N.N.HRVF Membership Acknowledgment Slip",
           text: `Dear ${fields.fullname},
 
-Your membership registration with HRVF has been received successfully.
+Your membership registration with G.N.N.HRVF has been received successfully.
 
 Payment Reference: ${paymentData.reference}
 
 Please find attached your official acknowledgment slip.
 
-Welcome to HRVF ✊
+Welcome to G.N.N.HRVF ✊
 
-— Human Rights Violation and Advocacy Foundation (HRVF)`,
-          attachments: [{ filename: "membership_slip.pdf", path: slipPath }],
+— Human Rights Violation and Advocacy Foundation (G.N.N.HRVF)`,
+          attachments: [{ filename: "membership_slip.pdf", content: slipBuffer }],
         });
       }
 
-      // --- Cleanup temporary files ---
-      const clean = (f) => {
-        try { fs.unlinkSync(f); } catch {}
-      };
-      clean(slipPath);
-      if (passportFile) clean(passportFile.path);
+      // --- Cleanup temporary passport file only ---
+      if (passportFile) {
+        try { fs.unlinkSync(passportFile.path); } catch {}
+      }
 
       res.status(200).json({ success: true });
     } catch (err) {
