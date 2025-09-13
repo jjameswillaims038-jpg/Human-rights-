@@ -12,12 +12,12 @@ function generateSlipNumber() {
 
 /**
  * Generates a membership acknowledgment slip PDF and returns it as a Buffer.
- * Works perfectly on Vercel (serverless).
+ * Safe for Vercel serverless.
  * @param {Object} formData - Registration form fields
  * @param {Object} paymentData - Payment info (reference, amount, paidAt)
  * @returns {Promise<Buffer>} PDF Buffer
  */
-export async function generateSlipPDF(formData, paymentData) {
+export async function generateSlipPDF(formData = {}, paymentData = {}) {
   return new Promise((resolve, reject) => {
     try {
       const doc = new PDFDocument({ margin: 50 });
@@ -25,12 +25,18 @@ export async function generateSlipPDF(formData, paymentData) {
 
       // Collect PDF data in memory
       doc.on("data", (chunk) => chunks.push(chunk));
-      doc.on("end", () => resolve(Buffer.concat(chunks)));
+      doc.on("end", () => {
+        try {
+          resolve(Buffer.concat(chunks));
+        } catch (err) {
+          reject(err);
+        }
+      });
 
       // --- HEADER ---
       doc.fillColor("#000000")
         .font("Helvetica-Bold")
-        .fontSize(18)
+        .fontSize(16)
         .text(
           "G.N.Nwodu Human Rights Violation and Advocacy Foundation (G.N.N.HRVF)",
           { align: "center" }
@@ -38,7 +44,7 @@ export async function generateSlipPDF(formData, paymentData) {
 
       doc.moveDown(0.5);
       doc.font("Helvetica-Bold")
-        .fontSize(14)
+        .fontSize(13)
         .text("MEMBERSHIP ACKNOWLEDGMENT SLIP", { align: "center" });
       doc.moveDown(2);
 
@@ -49,7 +55,7 @@ export async function generateSlipPDF(formData, paymentData) {
         `${formData.surname || ""} ${formData.othernames || ""}`.trim() ||
         "N/A";
 
-      doc.font("Helvetica").fontSize(12);
+      doc.font("Helvetica").fontSize(11);
 
       doc.font("Helvetica-Bold").text("Slip Number: ", { continued: true })
         .font("Helvetica").text(slipNo);
@@ -64,21 +70,23 @@ export async function generateSlipPDF(formData, paymentData) {
         .font("Helvetica").text(formData.phone || "N/A");
 
       doc.font("Helvetica-Bold").text("Payment Reference: ", { continued: true })
-        .font("Helvetica").text(paymentData?.reference || "N/A");
+        .font("Helvetica").text(paymentData.reference || "N/A");
 
       doc.font("Helvetica-Bold").text("Amount Paid: ", { continued: true })
         .font("Helvetica").text(
-          `₦${paymentData?.amount ? (paymentData.amount / 100).toFixed(2) : "0.00"}`
+          paymentData.amount
+            ? `₦${(paymentData.amount / 100).toFixed(2)}`
+            : "₦0.00"
         );
 
       doc.font("Helvetica-Bold").text("Payment Date: ", { continued: true })
         .font("Helvetica").text(
-          paymentData?.paidAt
+          paymentData.paidAt
             ? new Date(paymentData.paidAt).toLocaleString()
             : "N/A"
         );
 
-      doc.moveDown(1.5);
+      doc.moveDown(1.2);
 
       // --- STATUS ---
       doc.font("Helvetica-Bold").text("Membership Status: ", { continued: true })
@@ -86,25 +94,29 @@ export async function generateSlipPDF(formData, paymentData) {
       doc.moveDown(2);
 
       // --- SEAL ---
-      const cx = doc.page.width - 110;
-      const cy = doc.page.height - 140;
-      doc.save();
-      doc.circle(cx, cy, 60).lineWidth(3).stroke("#b22222");
-      doc.font("Helvetica-Bold").fontSize(8).fillColor("#b22222")
-        .text(
-          "G.N.Nwodu HUMAN RIGHTS VIOLATIONS\nAND ADVOCACY FOUNDATION",
-          cx - 50,
-          cy - 36,
-          { width: 100, align: "center" }
-        );
-      doc.fontSize(12).text("AUTHORISED", cx - 50, cy - 6, {
-        width: 100,
-        align: "center",
-      });
-      doc.restore();
+      try {
+        const cx = doc.page.width - 110;
+        const cy = doc.page.height - 140;
+        doc.save();
+        doc.circle(cx, cy, 60).lineWidth(3).stroke("#b22222");
+        doc.font("Helvetica-Bold").fontSize(8).fillColor("#b22222")
+          .text(
+            "G.N.Nwodu HUMAN RIGHTS VIOLATIONS\nAND ADVOCACY FOUNDATION",
+            cx - 50,
+            cy - 36,
+            { width: 100, align: "center" }
+          );
+        doc.fontSize(12).text("AUTHORISED", cx - 50, cy - 6, {
+          width: 100,
+          align: "center",
+        });
+        doc.restore();
+      } catch (sealErr) {
+        console.error("Seal drawing failed:", sealErr);
+      }
 
       // --- FOOTER ---
-      doc.moveDown(3);
+      doc.moveDown(2);
       doc.fillColor("black")
         .font("Helvetica-Oblique")
         .fontSize(10)
