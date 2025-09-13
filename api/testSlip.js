@@ -1,4 +1,4 @@
-import { generateSlipPDF } from "./generateSlipPDF.js";
+import { generateSlip } from "./generateSlip.js";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
