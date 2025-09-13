@@ -1,66 +1,134 @@
-import jsPDF from "jspdf";
+// generateSlip.js
+import PDFDocument from "pdfkit";
 import fs from "fs";
 import path from "path";
 import os from "os";
 
+function generateSlipNumber() {
+  const prefix = "HRVF"; // Human Rights Violation Foundation
+  const year = new Date().getFullYear().toString().slice(-2); // last 2 digits of year
+  const rand = Math.floor(1000 + Math.random() * 9000); // 4-digit random
+  return `${prefix}${year}${rand}`;
+}
+
 /**
- * Generates a membership slip PDF and returns the temp file path.
- * @param {Object} formData - The form fields from registration.
- * @param {Object} paymentData - The payment info (reference, amount, status).
- * @returns {Promise<string>} - The temporary file path of the PDF.
+ * Generates a membership acknowledgment slip PDF and returns the tmp file path.
+ * Works on Vercel (serverless).
+ * @param {Object} formData - Registration form fields
+ * @param {Object} paymentData - Payment info (reference, amount, paidAt)
+ * @returns {Promise<string>} Path to PDF file in /tmp
  */
 export async function generateSlipPDF(formData, paymentData) {
-  const doc = new jsPDF();
+  return new Promise((resolve, reject) => {
+    try {
+      const slipPath = path.join(
+        os.tmpdir(),
+        `${formData.surname || "member"}_HRVF_Slip.pdf`
+      );
 
-  // Unique slip number
-  const slipNo = `HRVF-${Math.floor(1000 + Math.random() * 9000)}-${new Date().getFullYear()}`;
-  const today = new Date().toLocaleDateString("en-NG");
+      const doc = new PDFDocument({ margin: 50 });
+      const stream = fs.createWriteStream(slipPath);
+      doc.pipe(stream);
 
-  // --- Header ---
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(18);
-  doc.text("G.N.Nwodu Human Rights Violation and Advocacy Foundation (G.N.N.HRVF)", 105, 20, { align: "center" });
-  doc.setFontSize(16);
-  doc.text("Membership Acknowledgment Slip", 105, 30, { align: "center" });
+      // --- HEADER ---
+      doc.fillColor("#000000")
+        .font("Helvetica-Bold")
+        .fontSize(18)
+        .text(
+          "G.N.Nwodu Human Rights Violation and Advocacy Foundation (G.N.N.HRVF)",
+          { align: "center" }
+        );
 
-  // --- User Info ---
-  doc.setFont("helvetica", "normal");
-  doc.setFontSize(12);
-  doc.text(`Slip No: ${slipNo}`, 20, 50);
-  doc.text(`Full Name: ${formData.fullname || `${formData.surname} ${formData.othernames}`}`, 20, 60);
-  doc.text(`Email: ${formData.email}`, 20, 70);
-  doc.text(`Phone: ${formData.phone}`, 20, 80);
-  doc.text(`Payment Reference: ${paymentData.reference}`, 20, 100);
-  doc.text(`Date: ${today}`, 20, 110);
+      doc.moveDown(0.5);
+      doc.font("Helvetica-Bold")
+        .fontSize(14)
+        .text("MEMBERSHIP ACKNOWLEDGMENT SLIP", { align: "center" });
+      doc.moveDown(2);
 
-  // --- Draw circular seal ---
-  const centerX = 150;
-  const centerY = 70;
-  const radius = 40;
+      // --- DETAILS ---
+      const slipNo = generateSlipNumber();
+      const fullName =
+        formData.fullname ||
+        `${formData.surname || ""} ${formData.othernames || ""}`.trim() ||
+        "N/A";
 
-  doc.setDrawColor(178, 34, 34);
-  doc.setLineWidth(1.5);
-  doc.circle(centerX, centerY, radius, "S");
+      doc.font("Helvetica").fontSize(12);
 
-  const sealText = "G.N.Nwodu HUMAN RIGHTS VIOLATIONS AND ADVOCACY FOUNDATION";
-  const angleStep = Math.PI / sealText.length; // top half
-  for (let i = 0; i < sealText.length; i++) {
-    const angle = -Math.PI / 2 + i * angleStep; // start at left top
-    const x = centerX + radius * Math.cos(angle);
-    const y = centerY + radius * Math.sin(angle) + 2; // small offset
-    doc.setFontSize(6);
-    doc.text(sealText[i], x, y, { align: "center", angle: (angle * 180) / Math.PI + 90 });
-  }
+      doc.font("Helvetica-Bold").text("Slip Number: ", { continued: true })
+        .font("Helvetica").text(slipNo);
 
-  // --- Footer ---
-  doc.setFontSize(10);
-  doc.text("✊ Defending Human Rights, Protecting Dignity", 105, 160, { align: "center" });
-  doc.text("© 2025 G.N.Nwodu Human Rights Violation and Advocacy Foundation", 105, 168, { align: "center" });
+      doc.font("Helvetica-Bold").text("Name: ", { continued: true })
+        .font("Helvetica").text(fullName);
 
-  // --- Write PDF to temporary file ---
-  const tmpFilePath = path.join(os.tmpdir(), `${formData.surname || "member"}_G.N.N.HRVF_Slip.pdf`);
-  const pdfBuffer = doc.output("arraybuffer");
-  fs.writeFileSync(tmpFilePath, Buffer.from(pdfBuffer));
+      doc.font("Helvetica-Bold").text("Email: ", { continued: true })
+        .font("Helvetica").text(formData.email || "N/A");
 
-  return tmpFilePath;
+      doc.font("Helvetica-Bold").text("Phone: ", { continued: true })
+        .font("Helvetica").text(formData.phone || "N/A");
+
+      doc.font("Helvetica-Bold").text("Payment Reference: ", { continued: true })
+        .font("Helvetica").text(paymentData?.reference || "N/A");
+
+      doc.font("Helvetica-Bold").text("Amount Paid: ", { continued: true })
+        .font("Helvetica")
+        .text(
+          `₦${
+            paymentData?.amount ? (paymentData.amount / 100).toFixed(2) : "0.00"
+          }`
+        );
+
+      doc.font("Helvetica-Bold").text("Payment Date: ", { continued: true })
+        .font("Helvetica")
+        .text(
+          paymentData?.paidAt
+            ? new Date(paymentData.paidAt).toLocaleString()
+            : "N/A"
+        );
+
+      doc.moveDown(1.5);
+
+      // --- STATUS ---
+      doc.font("Helvetica-Bold").text("Membership Status: ", { continued: true })
+        .font("Helvetica").text("ACTIVE");
+      doc.moveDown(2);
+
+      // --- SEAL ---
+      const cx = doc.page.width - 110;
+      const cy = doc.page.height - 140;
+      doc.save();
+      doc.circle(cx, cy, 60).lineWidth(3).stroke("#b22222");
+      doc.font("Helvetica-Bold").fontSize(8).fillColor("#b22222")
+        .text(
+          "G.N.Nwodu HUMAN RIGHTS VIOLATIONS\nAND ADVOCACY FOUNDATION",
+          cx - 50,
+          cy - 36,
+          { width: 100, align: "center" }
+        );
+      doc.fontSize(12).text("AUTHORISED", cx - 50, cy - 6, {
+        width: 100,
+        align: "center",
+      });
+      doc.restore();
+
+      // --- FOOTER ---
+      doc.moveDown(3);
+      doc.fillColor("black")
+        .font("Helvetica-Oblique")
+        .fontSize(10)
+        .text("✊ Defending Human Rights, Protecting Dignity", {
+          align: "center",
+        });
+      doc.text(
+        "© 2025 G.N.Nwodu Human Rights Violation and Advocacy Foundation",
+        { align: "center" }
+      );
+
+      doc.end();
+
+      stream.on("finish", () => resolve(slipPath));
+      stream.on("error", (err) => reject(err));
+    } catch (err) {
+      reject(err);
+    }
+  });
 }
