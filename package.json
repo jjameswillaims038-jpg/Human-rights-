@@ -1,7 +1,7 @@
 {
-  "name": "hrvf-membership-portal",
+  "name": "g.n.n.hrvf-membership-portal",
   "version": "1.0.0",
-  "description": "Human Rights Violation and Advocacy Foundation (HRVF) membership registration and payment portal",
+  "description": "G.N.Nwodu Human Rights Violation and Advocacy Foundation (G.N.N.HRVF) membership registration and payment portal",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
@@ -19,6 +19,6 @@
   "engines": {
     "node": ">=18.x"
   },
-  "author": "Human Rights Violation and Advocacy Foundation",
+  "author": "G.N.Nwodu Human Rights Violation and Advocacy Foundation",
   "license": "MIT"
 }
