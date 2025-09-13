@@ -4,7 +4,7 @@ import path from "path";
 import os from "os";
 import { v4 as uuidv4 } from "uuid";
 import Busboy from "busboy";
-import { generateSlipPDF } from "./generateSlipPDF";
+import { generateSlipPDF } from "./generateSlipPDF.js";
 
 export const config = {
   api: { bodyParser: false }, // disable default body parser for Busboy
@@ -15,11 +15,12 @@ export default async function handler(req, res) {
     return res.status(405).json({ success: false, error: "Method Not Allowed" });
   }
 
-  const bb = Busboy({ headers: req.headers });
+  const tmpdir = os.tmpdir();
   const fields = {};
   const files = {};
-  const tmpdir = os.tmpdir();
   const fileWritePromises = [];
+
+  const bb = Busboy({ headers: req.headers });
 
   bb.on("file", (fieldname, file, info) => {
     const filename = info?.filename || `upload-${Date.now()}`;
@@ -46,7 +47,7 @@ export default async function handler(req, res) {
     try {
       await Promise.all(fileWritePromises);
 
-      // --- Payment Data (example) ---
+      // --- Payment Data ---
       const paymentData = {
         reference: fields.paymentReference || "N/A",
         amount: fields.amount || 0,
@@ -64,7 +65,7 @@ export default async function handler(req, res) {
         service: "gmail",
         auth: {
           user: "yourhrvfemail@gmail.com",
-          pass: process.env.GMAIL_APP_PASSWORD,
+          pass: process.env.GMAIL_APP_PASSWORD, // set in Vercel env vars
         },
       });
 
@@ -86,7 +87,9 @@ Attachments: Membership Slip${passportFile ? " + Passport" : ""}
 `;
 
       const attachments = [{ filename: "membership_slip.pdf", path: slipPath }];
-      if (passportFile) attachments.push({ filename: passportFile.filename, path: passportFile.path });
+      if (passportFile) {
+        attachments.push({ filename: passportFile.filename, path: passportFile.path });
+      }
 
       await transporter.sendMail({
         from: "yourhrvfemail@gmail.com",
@@ -118,7 +121,9 @@ Welcome to HRVF ✊
       }
 
       // --- Cleanup temporary files ---
-      const clean = (f) => { try { fs.unlinkSync(f); } catch {} };
+      const clean = (f) => {
+        try { fs.unlinkSync(f); } catch {}
+      };
       clean(slipPath);
       if (passportFile) clean(passportFile.path);
 
@@ -129,5 +134,5 @@ Welcome to HRVF ✊
     }
   });
 
-  bb.end(req.body);
+  req.pipe(bb);
 }
