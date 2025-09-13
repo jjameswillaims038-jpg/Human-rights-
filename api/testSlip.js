@@ -18,7 +18,7 @@ export default async function handler(req, res) {
       paidAt: new Date().toISOString(),
     };
 
-    const pdfBuffer = await generateSlipPDF(formData, paymentData);
+    const pdfBuffer = await generateSlip(formData, paymentData);
 
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader(
