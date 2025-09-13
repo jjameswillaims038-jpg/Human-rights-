@@ -3,7 +3,7 @@ import fs from "fs";
 import os from "os";
 import { v4 as uuidv4 } from "uuid";
 import Busboy from "busboy";
-import { generateSlipPDF } from "./generateSlipPDF.js";
+import { generateSlipPDF } from "./generateSlip.js";
 
 export const config = {
   api: { bodyParser: false }, // disable default body parser
