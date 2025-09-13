@@ -19,7 +19,7 @@ export async function generateSlipPDF(formData, paymentData) {
   // --- Header ---
   doc.setFont("helvetica", "bold");
   doc.setFontSize(18);
-  doc.text("Human Rights Violation and Advocacy Foundation (HRVF)", 105, 20, { align: "center" });
+  doc.text("G.N.Nwodu Human Rights Violation and Advocacy Foundation (G.N.N.HRVF)", 105, 20, { align: "center" });
   doc.setFontSize(16);
   doc.text("Membership Acknowledgment Slip", 105, 30, { align: "center" });
 
@@ -30,7 +30,6 @@ export async function generateSlipPDF(formData, paymentData) {
   doc.text(`Full Name: ${formData.fullname || `${formData.surname} ${formData.othernames}`}`, 20, 60);
   doc.text(`Email: ${formData.email}`, 20, 70);
   doc.text(`Phone: ${formData.phone}`, 20, 80);
-  doc.text(`Membership Type: ${formData.membershipType || "General"}`, 20, 90);
   doc.text(`Payment Reference: ${paymentData.reference}`, 20, 100);
   doc.text(`Date: ${today}`, 20, 110);
 
@@ -43,7 +42,7 @@ export async function generateSlipPDF(formData, paymentData) {
   doc.setLineWidth(1.5);
   doc.circle(centerX, centerY, radius, "S");
 
-  const sealText = "HUMAN RIGHTS VIOLATIONS AND ADVOCACY FOUNDATION";
+  const sealText = "G.N.Nwodu HUMAN RIGHTS VIOLATIONS AND ADVOCACY FOUNDATION";
   const angleStep = Math.PI / sealText.length; // top half
   for (let i = 0; i < sealText.length; i++) {
     const angle = -Math.PI / 2 + i * angleStep; // start at left top
@@ -56,10 +55,10 @@ export async function generateSlipPDF(formData, paymentData) {
   // --- Footer ---
   doc.setFontSize(10);
   doc.text("✊ Defending Human Rights, Protecting Dignity", 105, 160, { align: "center" });
-  doc.text("© 2025 Human Rights Violation and Advocacy Foundation", 105, 168, { align: "center" });
+  doc.text("© 2025 G.N.Nwodu Human Rights Violation and Advocacy Foundation", 105, 168, { align: "center" });
 
   // --- Write PDF to temporary file ---
-  const tmpFilePath = path.join(os.tmpdir(), `${formData.surname || "member"}_HRVF_Slip.pdf`);
+  const tmpFilePath = path.join(os.tmpdir(), `${formData.surname || "member"}_G.N.N.HRVF_Slip.pdf`);
   const pdfBuffer = doc.output("arraybuffer");
   fs.writeFileSync(tmpFilePath, Buffer.from(pdfBuffer));
 
