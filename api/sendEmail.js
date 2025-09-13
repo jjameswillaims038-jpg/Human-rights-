@@ -1,13 +1,12 @@
 import nodemailer from "nodemailer";
 import fs from "fs";
-import path from "path";
 import os from "os";
 import { v4 as uuidv4 } from "uuid";
 import Busboy from "busboy";
 import { generateSlipPDF } from "./generateSlipPDF.js";
 
 export const config = {
-  api: { bodyParser: false }, // disable default body parser for Busboy
+  api: { bodyParser: false }, // disable default body parser
 };
 
 export default async function handler(req, res) {
@@ -22,18 +21,19 @@ export default async function handler(req, res) {
 
   const bb = Busboy({ headers: req.headers });
 
+  // Handle file uploads (passport only)
   bb.on("file", (fieldname, file, info) => {
     const filename = info?.filename || `upload-${Date.now()}`;
-    const filepath = path.join(tmpdir, `${uuidv4()}-${filename}`);
+    const filepath = `${tmpdir}/${uuidv4()}-${filename}`;
 
     const writePromise = new Promise((resolve, reject) => {
-      const writeStream = fs.createWriteStream(filepath);
-      file.pipe(writeStream);
-      writeStream.on("finish", () => {
+      const ws = fs.createWriteStream(filepath);
+      file.pipe(ws);
+      ws.on("finish", () => {
         files[fieldname] = { path: filepath, filename };
         resolve();
       });
-      writeStream.on("error", reject);
+      ws.on("error", reject);
     });
 
     fileWritePromises.push(writePromise);
@@ -55,9 +55,8 @@ export default async function handler(req, res) {
         status: "Verified",
       };
 
-      // --- Generate Membership Slip PDF (Buffer now) ---
+      // --- Generate Membership Slip PDF (in memory) ---
       const slipBuffer = await generateSlipPDF(fields, paymentData);
-
       const passportFile = files.passport;
 
       // --- Email Transporter ---
@@ -65,7 +64,7 @@ export default async function handler(req, res) {
         service: "gmail",
         auth: {
           user: "yourhrvfemail@gmail.com",
-          pass: process.env.GMAIL_APP_PASSWORD, // set in Vercel env vars
+          pass: process.env.GMAIL_APP_PASSWORD, // Vercel env variable
         },
       });
 
@@ -86,12 +85,8 @@ Status: ${paymentData.status}
 Attachments: Membership Slip${passportFile ? " + Passport" : ""}
 `;
 
-      const attachments = [
-        { filename: "membership_slip.pdf", content: slipBuffer },
-      ];
-      if (passportFile) {
-        attachments.push({ filename: passportFile.filename, path: passportFile.path });
-      }
+      const attachments = [{ filename: "membership_slip.pdf", content: slipBuffer }];
+      if (passportFile) attachments.push({ filename: passportFile.filename, path: passportFile.path });
 
       await transporter.sendMail({
         from: "yourhrvfemail@gmail.com",
