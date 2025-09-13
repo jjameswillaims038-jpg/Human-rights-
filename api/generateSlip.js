@@ -4,7 +4,7 @@ import PDFDocument from "pdfkit";
  * Generate slip number like HRVF251234
  */
 function generateSlipNumber() {
-  const prefix = "HRVF"; 
+  const prefix = "G.N.N.HRVF"; 
   const year = new Date().getFullYear().toString().slice(-2);
   const rand = Math.floor(1000 + Math.random() * 9000);
   return `${prefix}${year}${rand}`;
